@@ -33,7 +33,7 @@ android {
 
 dependencies {
 
-    implementation(project(path=":mantis"))
+    implementation(project(":GreenMantis"))
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

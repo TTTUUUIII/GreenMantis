@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "mantis"
+rootProject.name = "GreenMantis"
 include(":app")
-include(":mantis")
+include(":GreenMantis")
