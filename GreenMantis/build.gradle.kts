@@ -47,7 +47,7 @@ afterEvaluate {
 
 dependencies {
 
-    implementation(libs.appcompat)
+    compileOnly(libs.appcompat)
 //    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

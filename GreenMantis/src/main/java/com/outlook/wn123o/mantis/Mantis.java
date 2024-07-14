@@ -1,7 +1,6 @@
 package com.outlook.wn123o.mantis;
 
 import android.os.Handler;
-import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
