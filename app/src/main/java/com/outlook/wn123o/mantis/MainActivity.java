@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MantisListener {
         mSwitchFloatWindow = findViewById(R.id.switch_float_window);
         mSwitchFloatWindow.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (!MantisHelper.showFloatWindow(getApplicationContext())) {
+                if (!MantisHelper.showSummaryWindow(getApplicationContext())) {
                     buttonView.setChecked(false);
                     new MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.fail)
@@ -76,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements MantisListener {
                             .show();
                 }
             } else {
-                MantisHelper.dismissFloatWindow();
+                MantisHelper.dismissSummaryWindow();
             }
         });
     }

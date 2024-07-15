@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,23 +26,20 @@ import com.outlook.wn123o.mantis.util.AndroidUtils;
 
 import java.util.Locale;
 
-public class FloatWindow implements View.OnTouchListener, MantisListener {
+public class SummaryWindow implements View.OnTouchListener, MantisListener {
     private final Context mContext;
     private final WindowManager mWindowManager;
 
-    private View mView;
-
-    private TextView mPidTextView;
-    private TextView mCpuStatTextView;
-    private TextView mMemoryStatTextView;
+    protected View mView;
 
     private WindowManager.LayoutParams mLayoutParams;
     private boolean mShowing = false;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private Mantis mMantis;
-    private boolean mUseDarkMode = false;
+    private boolean mUseDarkMode = true;
+    private boolean mDragging = false;
 
-    public FloatWindow(Context context) {
+    public SummaryWindow(Context context) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
@@ -66,6 +64,9 @@ public class FloatWindow implements View.OnTouchListener, MantisListener {
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.LEFT | Gravity.TOP;
+        lp.x = 18;
+        lp.y = 15;
         lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         lp.format = PixelFormat.TRANSPARENT;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -91,17 +92,20 @@ public class FloatWindow implements View.OnTouchListener, MantisListener {
 
     protected void onBindTouchEvent() {
         mView.setOnTouchListener(this);
-        mMemoryStatTextView = mView.findViewById(R.id.text_view_mem_stat);
-        mCpuStatTextView = mView.findViewById(R.id.text_view_cpu_stat);
-        mPidTextView = mView.findViewById(R.id.text_view_pid);
+        mView.setOnLongClickListener(v -> {
+            if (!mDragging) {
+                isUseDarkMode(!mUseDarkMode);
+            }
+            return false;
+        });
     }
 
     protected void onUiModeUpdated() {
         if (mView != null) {
-            int backgroundColor = Color.argb(118, 255, 255, 255);
+            int backgroundColor = Color.argb(178, 255, 255, 255);
             int fontColor = Color.BLACK;
             if (mUseDarkMode) {
-                backgroundColor = Color.argb(118, 0, 0, 0);
+                backgroundColor = Color.argb(178, 0, 0, 0);
                 fontColor = Color.WHITE;
             }
             if (mView instanceof CardView) {
@@ -143,7 +147,7 @@ public class FloatWindow implements View.OnTouchListener, MantisListener {
         }
     }
 
-    public void isDarkMode(boolean isDarkMode) {
+    public void isUseDarkMode(boolean isDarkMode) {
         if (mUseDarkMode != isDarkMode) {
             mUseDarkMode = isDarkMode;
             onUiModeUpdated();
@@ -156,12 +160,14 @@ public class FloatWindow implements View.OnTouchListener, MantisListener {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        boolean intercept = false;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 _x = event.getRawX();
                 _y = event.getRawY();
                 break;
             case MotionEvent.ACTION_MOVE:
+                mDragging = true;
                 float x = event.getRawX();
                 float y = event.getRawY();
                 float offsetX = x - _x;
@@ -169,11 +175,15 @@ public class FloatWindow implements View.OnTouchListener, MantisListener {
                 _x = x;
                 _y = y;
                 onWindowMove(offsetX, offsetY);
+                intercept = true;
+                break;
+            case MotionEvent.ACTION_UP:
+                mDragging = false;
                 break;
             default:
-                return false;
+                /*Do Nothing.*/
         }
-        return true;
+        return intercept;
     }
 
     private void onWindowMove(float offsetX, float offsetY) {
@@ -205,9 +215,12 @@ public class FloatWindow implements View.OnTouchListener, MantisListener {
         if (mShowing) {
             String cpuStat = String.format(Locale.US, "%.1f%%", cpuUsed);
             String memoryStat = String.format(Locale.US, "%.1f%%", memUsed);
-            mPidTextView.setText(String.valueOf(pid));
-            mCpuStatTextView.setText(cpuStat);
-            mMemoryStatTextView.setText(memoryStat);
+            TextView memoryStatTextView = mView.findViewById(R.id.text_view_mem_stat);
+            TextView cpuStatTextView = mView.findViewById(R.id.text_view_cpu_stat);
+            TextView pidTextView = mView.findViewById(R.id.text_view_pid);
+            pidTextView.setText(String.valueOf(pid));
+            cpuStatTextView.setText(cpuStat);
+            memoryStatTextView.setText(memoryStat);
         }
     }
 }
