@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">mantis</string>
+    <string name="app_name">Green Mantis</string>
     <string name="follow">Follow</string>
+    <string name="float_window">Float Window</string>
 </resources>

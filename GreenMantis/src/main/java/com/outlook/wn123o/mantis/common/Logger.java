@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.Locale;
 
-final class Logger {
+public final class Logger {
     private static final String TAG = "Mantis";
     private Logger() {}
 

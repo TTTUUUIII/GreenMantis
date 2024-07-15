@@ -46,7 +46,7 @@ afterEvaluate {
 }
 
 dependencies {
-
+    implementation(libs.cardview)
     compileOnly(libs.appcompat)
 //    implementation(libs.material)
     testImplementation(libs.junit)

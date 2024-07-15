@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fail">Fail</string>
+    <string name="need_window_overy">This feature requires you to enable floating window permissions.</string>
+    <string name="cancel">cancel</string>
+    <string name="open">open</string>
+</resources>

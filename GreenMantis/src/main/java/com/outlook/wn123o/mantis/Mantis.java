@@ -17,11 +17,10 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Mantis {
 
-    private int mPid;
+    private final int mPid;
     private final MantisListener mListener;
     private final Handler mHandler;
 
