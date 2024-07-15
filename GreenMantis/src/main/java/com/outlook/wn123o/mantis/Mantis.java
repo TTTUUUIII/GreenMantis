@@ -56,8 +56,6 @@ public class Mantis {
                     onParseSystemMem(line);
                 } else if (line.contains(String.valueOf(mPid))) {
                     onParseSelfInfo(line);
-                } else {
-                    System.out.println(line);
                 }
             } catch (IOException e) {
                 e.printStackTrace(System.out);
