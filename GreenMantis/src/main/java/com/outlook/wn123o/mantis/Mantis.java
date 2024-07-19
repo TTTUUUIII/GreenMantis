@@ -50,11 +50,14 @@ public class Mantis {
         @Override
         protected boolean onLoop() {
             try {
-                String line = stdin.readLine().trim();
-                if (line.contains("Mem")) {
-                    onParseSystemMem(line);
-                } else if (line.contains(String.valueOf(mPid))) {
-                    onParseSelfInfo(line);
+                String line = stdin.readLine();
+                if (line != null) {
+                    line = line.trim();
+                    if (line.contains("Mem")) {
+                        onParseSystemMem(line);
+                    } else if (line.contains(String.valueOf(mPid))) {
+                        onParseSelfInfo(line);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace(System.out);
